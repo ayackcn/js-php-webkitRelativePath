@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+	<html>
+	<head>
+		<title>搜索 {$site_name} </title>
+		<meta name="keywords" content="" />
+		<meta name="description" content="">
+		<tc_include file="Public:head" />
+	</head>
+<body class="">
+<tc_include file="Public:nav" />
+<div class="container tc-main">
+	<div class="row">
+		<div class="span9">
+			<div class="main-title">
+					<!--form id="form1" name="form1" method="post" action="./index.php?m=list&a=mu_upload" enctype="multipart/form-data">
+					<label>
+					<input type="file" name="file" multiple webkitdirectory/>
+					</label>
+					<label>
+					<input type="submit" name="Submit" value="提交" />
+					</label>
+					</form-->
+					
+					<input type="file" name="multi_upload[]" id="multi_upload" multiple webkitdirectory />
+					<input type="submit" id="btn" name="Submit" value="提交" />
+			</div>
+
+
+		</div>
+
+		
+	</div>
+              
+<tc_include file="Public:footer"/>
+</div>
+
+<tc_include file="Public:scripts"/>
+<script>
+$("#btn").click(function(){
+		uploadFiles($("#multi_upload")[0].files);
+	});
+	function uploadFiles(files){
+
+		// Create a new HTTP requests, Form data item (data we will send to the server) and an empty string for the file paths.
+		xhr = new XMLHttpRequest();
+		data = new FormData();
+		paths = "";
+		
+		// Set how to handle the response text from the server
+		xhr.onreadystatechange = function(ev){
+			console.debug(xhr.responseText);
+		};
+		
+		// Loop through the file list
+		for (var i in files){
+			// Append the current file path to the paths variable (delimited by tripple hash signs - ###)
+			paths += files[i].webkitRelativePath+"###";
+			// Append current file to our FormData with the index of i
+			data.append(i, files[i]);
+		};
+		// Append the paths variable to our FormData to be sent to the server
+		// Currently, As far as I know, HTTP requests do not natively carry the path data
+		// So we must add it to the request manually.
+		data.append('paths', paths);
+		console.log(files[i].webkitRelativePath);
+			
+		// Open and send HHTP requests to upload.php
+		xhr.open('POST', "./index.php?m=list&a=mu_upload", true);
+		xhr.send(this.data);
+	}
+</script>
+</body>
+</html>
